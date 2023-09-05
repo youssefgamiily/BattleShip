@@ -1,0 +1,17 @@
+{
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gameBoard.js",
+  "scripts": {
+    "test": "jest /tests"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.6.4"
+  },
+  "jest": {
+    "type": "module"
+  }
+}
