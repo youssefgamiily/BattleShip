@@ -11,7 +11,9 @@ export class Ship {
     }
 
     hit() {
-        this.hitsTaken ++
+        
+        if (this.hitsTaken < this.numOfHitsToSink) this.hitsTaken ++
+        else throw("ship has already sunk")
     }
 
 }

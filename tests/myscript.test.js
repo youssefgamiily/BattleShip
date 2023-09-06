@@ -1,4 +1,4 @@
-import Ship from '../ship.js'
+import {Ship} from '../ship.js'
 
 it("creating a Ship object", () => {
     let ship = new Ship(2, 4)
