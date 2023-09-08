@@ -6,6 +6,7 @@ console.log(Ship)
 
 let ship = new Ship(2, 1)
 console.log(ship) 
+console.log(typeof ship) 
 
 ship.hit()
 
