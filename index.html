@@ -5,21 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script type='module' src="myscript.js"></script>
-    <link type="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     
     <div class="sideBar log hide">
-        <div id="player1Info">
-            <h3 class="playerNum">Player 1</h3>
-            <h3 class="playerName">Name: Joe</h3>
-            <h3 class="targetsHit">2</h3>
-        </div>
-        <div id="player2Info">
-            <h3 class="playerNum">Player 2</h3>
-            <h3 class="playerName">Name: Joe</h3>
-            <h3 class="targetsHit">2</h3>
-        </div>
+
     </div>
     <div>
         <h1>Battleship Game</h1>
@@ -32,18 +23,20 @@
         </div>
         <div class="player-names hide">
             <label for="player1">Player 1 Name:</label>
-            <input type="text" id="player1" placeholder="Enter Player 1 Name">
+            <input type="text" id="player1-input" placeholder="Enter Player 1 Name">
             <label for="player2">Player 2 Name:</label>
-            <input type="text" id="player2" placeholder="Enter Player 2 Name">
+            <input type="text" id="player2-input" placeholder="Enter Player 2 Name">
             <button type="button" id="start-game">Start Game</button>
         </div>
         <div id="start">
             <button id="startBtn">start</button>
         </div>
-        <div class="game-board">
-        </div>
         <table>
-            <tbody id="game-board">
+            <tbody id="game-board" class="p1">
+            </tbody>
+        </table>
+        <table class="hide">
+            <tbody id="game-board" class="p2">
             </tbody>
         </table>
     </div>

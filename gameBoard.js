@@ -1,7 +1,7 @@
-import {Ship} from './ship.js'
 class gameBoard {
     constructor(){
         this.gameBoard = this.initGameBoard()
+        this.ships = 0
     }
     initGameBoard () {
         let board = []
@@ -52,25 +52,22 @@ class gameBoard {
     }
     placeShip(shipToBePlaced, arr) {
         if (shipToBePlaced.length > arr.length) { 
-            console.log("in case 1")
             throw( new Error ("placing long ship on one square"))
         }
         if (!this.isArrAdjacent(arr)) { 
-            console.log("in case 2")
             throw("placing ship on non-adjacent squares")
         }
         if (shipToBePlaced > 5) { 
-            console.log("in case 3")
             throw("ship length exceeded maximum length")
         }
         if (this.isOutOfBounds(arr)) {
-            console.log("in case 4")
             throw("error placing ship out of bounds")
         }
         for (let cell of arr) { // ex. cell is '02'
             let row = parseInt(cell[0])
             let col = parseInt(cell[1])
             this.gameBoard[row][col].ship = shipToBePlaced
+            this.ships ++
         }
     return '1'
     }
@@ -81,7 +78,6 @@ class gameBoard {
     }
     ifCellHit(x,y){
         if (!this.isOutOfBounds([`${x}${y}`])) {
-            console.log(this.gameBoard[x][y].hit)
             return this.gameBoard[x][y].hit
         }
         else throw("this Cell is out of Bounds")
@@ -90,7 +86,10 @@ class gameBoard {
         if (this.isOutOfBounds[`${x}${y}`]) throw ("attacking place out of bounds")
         if (this.gameBoard[x][y].hit == true) throw("this square has been hit before")
         this.gameBoard[x][y].hit=true
-        if(this.gameBoard[x][y].ship !== null) this.gameBoard[x][y].ship.hit()
+        if(this.gameBoard[x][y].ship !== null) {
+            this.gameBoard[x][y].ship.hit()
+            if (this.gameBoard[x][y].ship.isSunk()) this.ships--
+        }
     }
 
     getShip (x,y) {

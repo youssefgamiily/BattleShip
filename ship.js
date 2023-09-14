@@ -9,14 +9,9 @@ export class Ship {
     isSunk () {
         return this.sunk
     }
-
     hit() {
-        
         if (this.hitsTaken < this.numOfHitsToSink) this.hitsTaken ++
         else throw("ship has already sunk")
-
         if (this.hitsTaken == this.numOfHitsToSink) this.sunk = true
-
     }
-
 }

@@ -1,5 +1,6 @@
 import {Ship} from '../ship.js'
 import {gameBoard} from '../gameBoard.js'
+import {Player} from '../player.js'
 
 /*testing Ship*/
 it("creating a Ship object", () => {
@@ -86,4 +87,10 @@ it("testing gameBoard getShip method ", () => {
     let ship1 = new Ship(1,1)
     gameBoard1.placeShip(ship1, ['00'])
     expect(gameBoard1.getShip(0,0)).toBe(ship1)
+})
+
+it ("testing creating player", () => {
+    const player1 = new Player("joe")
+    const player2 = new Player("Omar")
+    expect(player1.attack(player2, "00")).toBe(Omar.gameBoard.ifCellHit(0,0))
 })

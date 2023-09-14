@@ -1,17 +1,14 @@
-'enable strict'
-import {Ship} from './ship.js'
+import { initializeGame } from './initializeGame.js'
+import {Game} from './Game.js'
 
-console.log("hello world")
-console.log(Ship)
+const toggleHide = (elemArr) => {
+    for (let elem of elemArr) {
+        elem.classList.toggle("hide")
+    }
+}
 
-let ship = new Ship(2, 1)
-console.log(ship) 
-console.log(typeof ship) 
+let game = new Game()
+initializeGame(game)
+window.game = game
 
-ship.hit()
-
-console.log(ship) 
-
-ship.hit()
-
-console.log(ship) 
+export {toggleHide}
