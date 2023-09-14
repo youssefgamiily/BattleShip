@@ -4,8 +4,10 @@ class Game {
         this.player2 = null
         this.round = 0
         this.turn = this.player1
+        this.otherPlayer = this.player2
         this.winner = null
     }
+
     isWin() {
         if (this.player1.gameBoard.ships.length === 0) {
             this.winner = 'player2';
@@ -19,35 +21,30 @@ class Game {
     addPlayer(playerNum, playerInstance) {
         if (playerNum == 1) {
             this.player1 = playerInstance
+            this.turn = this.player1
         } else if (playerNum == 2) {
             this.player2 = playerInstance
+            this.otherPlayer = this.player2
         }
         else throw new Error("this is not a valid playerNum")
     }
-    hideAllTables ()  {
-        for (let table of Array.from(document.querySelectorAll("table"))) {
-            table.classList.add("hide")
+
+    switchTurns () {
+        if (this.turn == this.player1) {
+            this.turn = this.player2
+            this.otherPlayer = this.player1
+        }
+        else {
+            this.turn = this.player1
+            this.otherPlayer = this.player2
         }
     }
-    renderGame () {
-        this.hideAllTables()
-
-            const gameBoard = document.querySelector(`.p${playerNum}`)
-            for (let row = 0; row < 10; row++) {
-                const newRow = document.createElement("tr");
+    receiveUserHit(cell) { // cell is 00
+        console.log(this)
+        console.log(this.otherPlayer)
+        console.log(this.turn)
+        this.otherPlayer.renderGame()
     
-                for (let col = 0; col < 10; col++) {
-                    const cellId = `${row}${col}`;
-                    const newCell = document.createElement("td");
-                    newCell.id = cellId;
-                    newCell.textContent = "";
-                    newRow.appendChild(newCell);
-                }
-    
-                gameBoard.appendChild(newRow);
-            } 
-        
-        console.log("leaving renderTable")
     }
 }
 

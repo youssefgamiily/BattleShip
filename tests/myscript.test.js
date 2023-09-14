@@ -28,7 +28,6 @@ it("creating a gameBoard failed", () => {
 
 it("testing ifShipExists method", () => {
     let gameBoard1 = new gameBoard()
-    console.log(gameBoard1)
     gameBoard1.gameBoard[0][0].ship = new Ship (1,1)
     expect(gameBoard1.ifShipExists(0,0)).toBe(true)
 })

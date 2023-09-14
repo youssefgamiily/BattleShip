@@ -1,8 +1,9 @@
 import { gameBoard } from "./gameBoard.js"
 
 class Player {
-    constructor(name) {
+    constructor(name, num) {
         this.name = name
+        this.num = num
         this.numberOfTurns = 0
         this.numberOfHits = 0
         this.numberOfMissed = 0
@@ -22,6 +23,30 @@ class Player {
         else throw("attacking out of bounds cell")
         if(enemy.gameBoard.ifCellHit() === true) return true
         
+    }
+    hideAllTables ()  {
+        for (let table of Array.from(document.querySelectorAll("table"))) {
+            table.classList.add("hide")
+        }
+    }
+    renderGame () {
+        // this.hideAllTables()
+            console.log("in renderGame")
+            const gameBoardHTML = document.querySelector(`.p${this.num}`)
+            console.log(gameBoardHTML)
+            for (let row = 0; row < 10; row++) {
+                const newRow = document.createElement("tr");
+    
+                for (let col = 0; col < 10; col++) {
+                    const cellId = `${row}${col}`;
+                    const newCell = document.createElement("td");
+                    newCell.id = cellId;
+                    newCell.textContent = "";
+                    newRow.appendChild(newCell);
+                }
+    
+                gameBoardHTML.appendChild(newRow);
+            }         
     }
 }
 
