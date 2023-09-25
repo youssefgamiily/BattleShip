@@ -60,7 +60,7 @@ class Player {
       }
     }
   }
-  renderGame() {
+  renderGame() { // renders player's gameBoard
     this.hideAllTables();
     for (let Class of this.boardDOM.classList) {
       if (this.boardDOM.classList.contains("hide"))
@@ -68,6 +68,17 @@ class Player {
     }
     return this.boardDOM;
   }
+
+  addGameBelow() {
+    let tables = document.querySelectorAll("table")
+    let bottomDiv = document.querySelector(".bel-disp")
+    for (let table of tables) {
+      if (table !== this.boardDOM) {
+        bottomDiv.insertAdjacentElement(table)
+      }
+    }
+  }
+
 }
 
 export { Player };
