@@ -1,45 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script type='module' src="myscript.js"></script>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    
-    <div class="sideBar log hide">
+    <script type="module" src="myscript.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="sideBar log hide"></div>
+    <div class="gameDiv">
+      <h1>Battleship Game</h1>
+      <div id="question-mark-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="100"
+          height="100"
+          viewBox="0 0 100 100"
+        >
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            fill="transparent"
+            stroke="#333"
+            stroke-width="10"
+          />
+          <text
+            x="50"
+            y="60"
+            font-family="Arial, sans-serif"
+            font-size="60"
+            fill="#333"
+            text-anchor="middle"
+          >
+            ?
+          </text>
+          <text
+            x="50"
+            y="80"
+            font-family="Arial, sans-serif"
+            font-size="18"
+            fill="#333"
+            text-anchor="middle"
+          >
+            Help
+          </text>
+        </svg>
+      </div>
+      <div class="player-names">
+        <label for="player1">Player 1 Name:</label>
+        <input
+          type="text"
+          id="player1-input"
+          placeholder="Enter Player 1 Name"
+        />
+        <label for="player2">Player 2 Name:</label>
+        <input
+          type="text"
+          id="player2-input"
+          placeholder="Enter Player 2 Name"
+        />
+        <button type="button" id="start-game">Start Game</button>
+      </div>
 
+      <div class="NumShipsDiv" id="hide">
+        <div>
+          <label for="NoOfShips">Enter the Number of Ships (4 squares)</label>
+          <input type="text" id="NoOfShips-4sq" />
+        </div>
+        <div>
+          <label for="NoOfShips">Enter the Number of Ships (3 squares)</label>
+          <input type="text" id="NoOfShips-3sq" />
+        </div>
+        <div>
+          <label for="NoOfShips">Enter the Number of Ships (2 squares)</label>
+          <input type="text" id="NoOfShips-2sq" />
+        </div>
+        <div>
+          <label for="NoOfShips">Enter the Number of Ships (1 squares)</label>
+          <input type="text" id="NoOfShips-1sq" />
+        </div>
+        <button id="startBtn">start</button>
+      </div>
+      <div class="top">
+        <div class="top-disp"></div>
+        <div class="top-next hide">
+          <button class="nextBtn">next</button>
+        </div>
+      </div>
+      <div class="bel-disp"></div>
     </div>
-    <div>
-        <h1>Battleship Game</h1>
-        <div id="question-mark-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="45" fill="transparent" stroke="#333" stroke-width="10"/>
-                <text x="50" y="60" font-family="Arial, sans-serif" font-size="60" fill="#333" text-anchor="middle">?</text>
-                <text x="50" y="80" font-family="Arial, sans-serif" font-size="18" fill="#333" text-anchor="middle">Help</text>
-            </svg>        
-        </div>
-        <div class="player-names hide">
-            <label for="player1">Player 1 Name:</label>
-            <input type="text" id="player1-input" placeholder="Enter Player 1 Name">
-            <label for="player2">Player 2 Name:</label>
-            <input type="text" id="player2-input" placeholder="Enter Player 2 Name">
-            <button type="button" id="start-game">Start Game</button>
-        </div>
-        <div id="start">
-            <button id="startBtn">start</button>
-        </div>
-        <table>
-            <tbody id="game-board" class="p1">
-            </tbody>
-        </table>
-        <table class>
-            <tbody id="game-board" class="p2">
-            </tbody>
-        </table>
-    </div>
-
-</body>
+  </body>
 </html>

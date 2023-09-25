@@ -2,6 +2,9 @@
 
 import {Player} from './player.js'
 import {toggleHide} from './toggleHide.js'
+import {startGameLoop} from './gameLoop.js'
+import {dispTop, initShipPlacement} from './shipPlacement.js'
+
 
 let body = document.querySelector("body")
 let helpSVG = body.querySelector('#question-mark-icon svg');
@@ -10,55 +13,107 @@ let playerNamesDiv = body.querySelector(".player-names")
 let gameStartBtn = body.querySelector("#start-game")
 let player1Input = body.querySelector("#player1-input")
 let player2Input = body.querySelector("#player2-input")
-let gameBoards = body.querySelectorAll("table")
+let NumShipsDiv = body.querySelector(".NumShipsDiv")
+let bottomDiv = document.querySelector(".bel-disp")
 
 
 
-
-const addTableEventListeners = (game) => {
-    for (let table of Array.from(gameBoards)) {
-        table.addEventListener("click", (e) =>{
-            e.preventDefault()
-            console.log(e)
-            if (e.target.nodeName == "TD") {
-                if ( -1 < parseInt(e.target.id) < 100) {
-                    game.receiveUserHit(e.target.id)
-                    // e.target is the element of the clicked node - you can access it here
-                    // 1. is there a ship on this cell ? 
-                        // if yes, hit the ship and the cell on the game board
-                            // mark the cell as hit
-                            // if the ship is sunk, 
-                                //mark this cell as sunk (sunk ship)
-                                // also if the ship is on more than 1 square and it's hit, mark the rest of the squares on the ship as hit and sunk
-                                // uncover the surrounding cells on the gameboard around the sunk ship
-                            // if the is not sunk, mark this cell as hit a target (smoke out)
-                    // 2. if no cell on this cell, mark cell as hit (missed shot)
-
-                }
-            }
-        })
+const dispBelow = (message, additionalElements = []) => {
+    const heading = document.createElement("h3");
+    heading.id="temp-header"
+    heading.insertAdjacentHTML("beforeend", message)
+    bottomDiv.innerHTML = "";
+    bottomDiv.insertAdjacentElement("afterbegin", heading);
+    for (const element of additionalElements) {
+      bottomDiv.insertAdjacentElement("beforeend", element);
     }
+  };
+
+
+const getGameSpecs = () => {
+    const allInputs = NumShipsDiv.querySelectorAll("div input");
+    if (Array.from(allInputs).every((field) => !isNaN(parseInt(field.value)))) {
+      const numOfShips = {
+        NumSqIs4: parseInt(NumShipsDiv.querySelector("#NoOfShips-4sq").value),
+        NumSqIs3: parseInt(NumShipsDiv.querySelector("#NoOfShips-3sq").value),
+        NumSqIs2: parseInt(NumShipsDiv.querySelector("#NoOfShips-2sq").value),
+        NumSqIs1: parseInt(NumShipsDiv.querySelector("#NoOfShips-1sq").value),
+      };
+      game.numberOfShips = numOfShips;
+    } else throw new Error("number of ships for the game is not a valid number");
+    NumShipsDiv.id="hide"
+    return game.numOfShips;
+    // document.querySelector(".NumShipsDiv").id="hide"
 }
 
-function initializeGame (game ) {
-    startProgram.addEventListener("click", () => {
-        toggleHide([startProgram, playerNamesDiv])
+async function initializeGame (game) {
+    return new Promise (() => {
+    startProgram.addEventListener("click", async () => {
+        // toggleHide([startProgram, playerNamesDiv])
+        getGameSpecs()
+        game.addPlayer(1, new Player(player1Input.value, 1))
+        game.addPlayer(2, new Player(player2Input.value, 2))
+        
+
+        await initShipPlacement(game)
+        // game.player1.renderGame()
+        
+        
+
+        
+
     })
+
     gameStartBtn.addEventListener("click", async () => {
         let userInputsArr = Array.from(playerNamesDiv.querySelectorAll("input"))
         if (userInputsArr.every(elem => elem.value != "")) {
             toggleHide([playerNamesDiv])
-            game.addPlayer(1, new Player(player1Input.value, 1))
-            game.addPlayer(2, new Player(player2Input.value, 2))
-            game.player1.renderGame()
-            addTableEventListeners(game)
+            NumShipsDiv.id=""
+            
         }
         else throw new Error("Players not submitted") 
     })
+
     
 
+    
 
+})
 
 }
 
-export {initializeGame}
+const addTableEventListeners = (game) => {
+    return new Promise((resolve) => {
+        
+        let gameBoards = body.querySelectorAll("table")
+        console.log(gameBoards)
+        for (let table of Array.from(gameBoards)) {
+            table.addEventListener("click", (e) =>{
+                e.preventDefault()
+                console.log(e)
+                if (e.target.nodeName == "TD") {
+                    if ( -1 < parseInt(e.target.id) < 100) {
+                        
+                        const affectedPlayer = e.target.closest("table").classList.item(0)[1]
+                        const move= [affectedPlayer, e.target]
+                        console.log(move)
+                        game.registerMove(move)
+                        
+                    }
+                }
+            
+                game.turn.hideAllTables()
+                game.switchTurns()
+                dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
+                game.otherPlayer.renderGame()
+                dispBelow(`Player-${game.turn.num}'s own Board`)
+                game.turn.renderGame()
+            })
+        }
+        startGameLoop(game) 
+        resolve()
+    
+    })
+}
+
+export {initializeGame, addTableEventListeners}
