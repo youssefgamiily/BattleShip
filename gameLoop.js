@@ -7,6 +7,8 @@ const startGameLoop = (game) => {
     console.log(game)
     tablesLabels.classList.remove("hide")
     game.renderGame()
+
+    // 
 }
 
 export {startGameLoop}

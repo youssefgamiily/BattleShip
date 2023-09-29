@@ -91,31 +91,36 @@ async function initializeGame (game) {
 
 const addTableEventListeners = (game) => {
     return new Promise((resolve) => {
-        
+        game.renderGame()
         let gameBoards = body.querySelectorAll("table")
         console.log(gameBoards)
         for (let table of Array.from(gameBoards)) {
-            table.addEventListener("click", (e) =>{
-                e.preventDefault()
-                console.log(e)
-                if (e.target.nodeName == "TD") {
-                    if ( -1 < parseInt(e.target.id) < 100) {
-                        
-                        const affectedPlayer = e.target.closest("table").classList.item(0)[1]
-                        const move= [affectedPlayer, e.target]
-                        console.log(move)
-                        game.registerMove(move)
-                        
+            console.log("in for loop")
+            console.log(table, game.turn.boardDOM)
+            if (table === game.turn.boardDOM){
+                console.log("in L98")
+                table.addEventListener("click", (e) =>{
+                    e.preventDefault()
+                    console.log(e)
+                    if (e.target.nodeName == "TD") {
+                        if ( -1 < parseInt(e.target.id) < 100) {
+                            console.log("in L104")
+                            const affectedPlayer = e.target.closest("table").classList.item(0)[1]
+                            const move= [affectedPlayer, e.target]
+                            console.log(move)
+                            game.registerMove(move)
+                            
+                        }
                     }
-                }
-
-                game.turn.hideAllTables()
-                game.switchTurns()
-                dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
-                game.otherPlayer.renderGame()
-                dispBelow(`Player-${game.turn.num}'s own Board`)
-                game.turn.addGameBelow()
-            })
+                    console.log("in L112")
+                    game.turn.hideAllTables()
+                    game.switchTurns()
+                    dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
+                    game.otherPlayer.renderGame()
+                    dispBelow(`Player-${game.turn.num}'s own Board`)
+                    game.turn.addGameBelow()
+                })
+            }
         }
         startGameLoop(game) 
         resolve()

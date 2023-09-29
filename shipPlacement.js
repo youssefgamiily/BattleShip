@@ -126,7 +126,7 @@ const attachListener = (clearFormInputs) => {
       game.switchTurns();
       switchTurns();
       addTableEventListeners(game);
-      startGameLoop(game);
+      // startGameLoop(game);
     }
   });
 };
