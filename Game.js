@@ -99,6 +99,29 @@ class Game {
     this.logMove(move);
     this.markmove(move);
   }
+
+  insertHTMLafterElem(elem1, elem2) {
+    elem1.insertAdjacentHTML("afterend", elem2);
+  }
+
+  renderGame() {
+    // renders player's gameBoard
+    const tables = document.querySelector(".tables");
+    tables.innerHTML = "";
+
+    document.querySelector("#tables-label").remove();
+    const html = `<div class="wrapper" id="tables-label">
+    <div class="top-disp">Your GameBoard</div>
+    <div class="disp-bel">Enemy Gameboard</div>
+    </div>`;
+    this.insertHTMLafterElem(document.querySelector(".NumShipsDiv"), html);
+    tables.insertAdjacentElement("beforeend", this.otherPlayer.boardDOM);
+    tables.insertAdjacentElement("beforeend", this.turn.boardDOM);
+
+    return this.boardDOM;
+  }
+
+  removeGameRender() {}
 }
 
 export { Game };

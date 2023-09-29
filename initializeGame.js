@@ -14,18 +14,25 @@ let gameStartBtn = body.querySelector("#start-game")
 let player1Input = body.querySelector("#player1-input")
 let player2Input = body.querySelector("#player2-input")
 let NumShipsDiv = body.querySelector(".NumShipsDiv")
-let bottomDiv = document.querySelector(".bel-disp")
 
 
 
 const dispBelow = (message, additionalElements = []) => {
-    const heading = document.createElement("h3");
-    heading.id="temp-header"
-    heading.insertAdjacentHTML("beforeend", message)
-    bottomDiv.innerHTML = "";
-    bottomDiv.insertAdjacentElement("afterbegin", heading);
-    for (const element of additionalElements) {
-      bottomDiv.insertAdjacentElement("beforeend", element);
+    if (!document.querySelector(".bel-disp")){
+        const bottomDiv = document.createElement("div")
+        bottomDiv.classList.add("bel-disp")
+        const heading = document.createElement("h3");
+        heading.id="temp-header"
+        heading.insertAdjacentHTML("beforeend", message)
+        bottomDiv.innerHTML = "";
+        bottomDiv.insertAdjacentElement("afterbegin", heading);
+        for (const element of additionalElements) {
+        bottomDiv.insertAdjacentElement("beforeend", element);
+        }
+        body.insertAdjacentElement("beforeend", bottomDiv) 
+    } else if (document.querySelector(".bel-disp")) {
+        document.querySelector(".bel-disp").remove()
+        dispBelow (message, additionalElements)
     }
   };
 
@@ -101,13 +108,13 @@ const addTableEventListeners = (game) => {
                         
                     }
                 }
-            
+
                 game.turn.hideAllTables()
                 game.switchTurns()
                 dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
                 game.otherPlayer.renderGame()
                 dispBelow(`Player-${game.turn.num}'s own Board`)
-                game.turn.renderGame()
+                game.turn.addGameBelow()
             })
         }
         startGameLoop(game) 

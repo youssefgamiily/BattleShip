@@ -29,6 +29,8 @@ const addTableEventListeners = (game) => {
 
     game.turn.hideAllTables()
     game.switchTurns()
+    game.turn.renderGame()
+
 };
 
 const startGame = (game) => {

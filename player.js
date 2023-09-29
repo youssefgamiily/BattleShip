@@ -1,5 +1,4 @@
 import { gameBoard } from "./gameBoard.js";
-
 class Player {
   constructor(name, num) {
     this.name = name;
@@ -17,7 +16,7 @@ class Player {
     const tbodyElement = document.createElement("tbody");
     tableElement.id = "game-board";
     tableElement.classList.add(`p${this.num}`);
-    tableElement.classList.add(`hide`);
+    // tableElement.classList.add(`hide`);
     tableElement.id = `${this.num}`;
 
     for (let row = 0; row < 10; row++) {
@@ -35,7 +34,7 @@ class Player {
     }
 
     tableElement.appendChild(tbodyElement);
-    document.body.querySelector(".gameDiv").appendChild(tableElement);
+    // document.body.querySelector(".tables").insertAdjacentElement("beforeend",tableElement);
     return tableElement;
   }
   attack(enemy, square) {
@@ -60,21 +59,14 @@ class Player {
       }
     }
   }
-  renderGame() { // renders player's gameBoard
-    this.hideAllTables();
-    for (let Class of this.boardDOM.classList) {
-      if (this.boardDOM.classList.contains("hide"))
-        this.boardDOM.classList.remove("hide");
-    }
-    return this.boardDOM;
-  }
+
 
   addGameBelow() {
     let tables = document.querySelectorAll("table")
     let bottomDiv = document.querySelector(".bel-disp")
     for (let table of tables) {
       if (table !== this.boardDOM) {
-        bottomDiv.insertAdjacentElement(table)
+        // bottomDiv.parentNode.insertAdjacentElement("beforeend", table)
       }
     }
   }

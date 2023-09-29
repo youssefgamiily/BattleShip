@@ -1,14 +1,13 @@
-import {parseStringToArrays, toggleHide} from './toggleHide.js'
-import {Ship} from './ship.js'
-import {startGameLoop} from './gameLoop.js'
-import {addTableEventListeners} from './initializeGame.js'
+import { parseStringToArrays, toggleHide } from "./toggleHide.js";
+import { Ship } from "./ship.js";
+import { startGameLoop } from "./gameLoop.js";
+import { addTableEventListeners } from "./initializeGame.js";
 
 const topDiv = document.querySelector(".top-disp");
 let body = document.querySelector("body");
 const gameDiv = document.querySelector(".gameDiv");
-let placeShipDiv
-let submitShipPositionsBtn
-
+let placeShipDiv;
+let submitShipPositionsBtn;
 
 const formShipPositionsDiv = (game) => {
   const HTML = `<div class='ShipPlacementWrapper'><div class="placeShipDiv">
@@ -38,109 +37,111 @@ const formShipPositionsDiv = (game) => {
   /></div>
   <div class="buttonWrapper"><button type="button" id="submitShipPositions">Submit</button></div>
   </div></div>`;
-  gameDiv.insertAdjacentHTML("beforeend", HTML)
-  placeShipDiv = document.querySelector(".placeShipDiv")
-  submitShipPositionsBtn = placeShipDiv.parentNode.querySelector("#submitShipPositions")
+  gameDiv.insertAdjacentHTML("beforeend", HTML);
+  placeShipDiv = document.querySelector(".placeShipDiv");
+  submitShipPositionsBtn = placeShipDiv.parentNode.querySelector(
+    "#submitShipPositions"
+  );
 };
 
-
 const dispTop = (message, additionalElements = []) => {
-  console.log(`in dispTop with message = ${message}`)
+  if (topDiv.parentNode.parentNode.classList.contains("hide")) {
+    console.log("in if condition---- L49  -----");
+    topDiv.parentNode.parentNode.classList.remove("hide");
+  }
+  if (topDiv.parentNode.querySelector(".disp-bel"))
+    topDiv.parentNode.querySelector(".disp-bel").remove();
+  console.log(`in dispTop with message = ${message}`, topDiv);
   const heading = document.createElement("h3");
-  heading.id="temp-header"
-  heading.insertAdjacentHTML("beforeend", message)
+  heading.id = "temp-header";
+  heading.insertAdjacentHTML("beforeend", message);
   topDiv.innerHTML = "";
-  console.log(`element to be added is: `, heading)
+  console.log(`element to be added is: `, heading);
   topDiv.insertAdjacentElement("afterbegin", heading);
   for (const element of additionalElements) {
     topDiv.insertAdjacentElement("beforeend", element);
   }
-  console.log(`topDiv is now: `, topDiv)
+  console.log(`topDiv is now: `, topDiv);
 };
 
 const dispTopRemove = () => {
-  if(topDiv) topDiv.remove()
-}
+  if (topDiv) topDiv.remove();
+};
 
-function getShipPositions (game, guide) {  // by me
-  return new Promise( () => {
-  const shipPositions = Array.from(placeShipDiv.querySelectorAll("input"));
-  for (let input of shipPositions) {
-    let id = parseInt(input.id[0])
-    const Value = parseStringToArrays(input.value)
-    for (let element of Value) { // element should be ['']
-      game.turn.gameBoard.placeShip(new Ship(id,id), element)
+function getShipPositions(game, guide) {
+  // by me
+  return new Promise(() => {
+    const shipPositions = Array.from(placeShipDiv.querySelectorAll("input"));
+    for (let input of shipPositions) {
+      let id = parseInt(input.id[0]);
+      const Value = parseStringToArrays(input.value);
+      for (let element of Value) {
+        // element should be ['']
+        game.turn.gameBoard.placeShip(new Ship(id, id), element);
+      }
     }
-  };
-  })
+  });
 }
-
-
 
 function handlePlayer(int, game) {
-  console.log(`in handlePlayer with int ${int}`)
-  let message = int ==1 ? 'Player-1, please enter your ship positions below' : 'Player-2, please enter your ship positions below'
-  dispTop(message)
-  console.log(`after dispTop, topDiv now is: `, topDiv)
-  formShipPositionsDiv(game)
-} 
+  console.log(`in handlePlayer with int ${int}`);
+  let message =
+    int == 1
+      ? "Player-1, please enter your ship positions below"
+      : "Player-2, please enter your ship positions below";
+  dispTop(message);
+  console.log(`after dispTop, topDiv now is: `, topDiv);
+  formShipPositionsDiv(game);
+}
 
-
-let buttonClicked
-let turn1 = true
-let turn2 = false
+let buttonClicked;
+let turn1 = true;
+let turn2 = false;
 
 let switchTurns = () => {
-  turn1 = !turn1
-  turn2 = !turn2
-}
+  turn1 = !turn1;
+  turn2 = !turn2;
+};
 
 const attachListener = (clearFormInputs) => {
   submitShipPositionsBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     buttonClicked = true;
     getShipPositions(game, game.turn);
-    let existingShipPlacementWrapper = document.querySelector('.ShipPlacementWrapper');
+    let existingShipPlacementWrapper = document.querySelector(
+      ".ShipPlacementWrapper"
+    );
 
     if (turn1) {
-      
       clearFormInputs(existingShipPlacementWrapper);
       game.switchTurns();
-      switchTurns()
-      dispTop(`Player-${game.turn.num}, please enter your ship positions below`);
-    }
-  
-    else if (turn2){
-      
-      if(existingShipPlacementWrapper) existingShipPlacementWrapper.remove()
+      switchTurns();
+      dispTop(
+        `Player-${game.turn.num}, please enter your ship positions below`
+      );
+    } else if (turn2) {
+      if (existingShipPlacementWrapper) existingShipPlacementWrapper.remove();
       // dispTopRemove()
-      dispTop("")
-      game.switchTurns()
-      switchTurns()
-      addTableEventListeners(game) 
-      startGameLoop(game)
+      dispTop("");
+      game.switchTurns();
+      switchTurns();
+      addTableEventListeners(game);
+      startGameLoop(game);
     }
-
   });
-}
+};
 
-
-
-  const clearFormInputs = (form) => {
-    console.log("in clearFormInputs")
-    const inputsArr = Array.from(form.querySelectorAll("input"))
-    inputsArr.forEach(elem => elem.value="")
-    console.log(inputsArr)
-  }
+const clearFormInputs = (form) => {
+  console.log("in clearFormInputs");
+  const inputsArr = Array.from(form.querySelectorAll("input"));
+  inputsArr.forEach((elem) => (elem.value = ""));
+  console.log(inputsArr);
+};
 
 async function initShipPlacement(game) {
-
-  handlePlayer(game.turn.num, game)
-  attachListener(clearFormInputs)
+  handlePlayer(game.turn.num, game);
+  attachListener(clearFormInputs);
   // At this point, both players have entered ship positions, and you can start the game.
-  
-
 }
-
 
 export { dispTop, initShipPlacement };

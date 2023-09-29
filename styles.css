@@ -123,3 +123,15 @@ td {
 .buttonWrapper {
   width: 80%;
 }
+
+
+.tables {
+  display: flex;
+}
+
+#tables-label {
+  display: flex;
+  justify-content:flex-start;
+  align-items: center;
+  gap: 25vw;
+}
