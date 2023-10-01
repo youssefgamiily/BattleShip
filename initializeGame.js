@@ -56,11 +56,15 @@ const getGameSpecs = () => {
 async function initializeGame (game) {
     return new Promise (() => {
     startProgram.addEventListener("click", async () => {
+        console.log("in startProgram Event Listener")
+
         // toggleHide([startProgram, playerNamesDiv])
         getGameSpecs()
         game.addPlayer(1, new Player(player1Input.value, 1))
         game.addPlayer(2, new Player(player2Input.value, 2))
         
+        // remove the hide class from .secondWrapper
+        if (document.querySelector(".secondWrapper").classList.contains("hide")) document.querySelector(".secondWrapper").classList.remove("hide")
 
         await initShipPlacement(game)
         // game.player1.renderGame()
@@ -98,6 +102,8 @@ const addTableEventListeners = (game) => {
             console.log("in for loop")
             console.log(table, game.turn.boardDOM)
             if (table === game.turn.boardDOM){
+                const otherTable = Array.from(gameBoards).filter((table)=> table!==game.turn.boardDOM)
+                game.removeOtherListener()// remove the evenlisteners from the other table
                 console.log("in L98")
                 table.addEventListener("click", (e) =>{
                     e.preventDefault()
@@ -114,11 +120,11 @@ const addTableEventListeners = (game) => {
                     }
                     console.log("in L112")
                     game.turn.hideAllTables()
+                    
                     game.switchTurns()
                     dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
-                    game.otherPlayer.renderGame()
+                    game.renderGame()
                     dispBelow(`Player-${game.turn.num}'s own Board`)
-                    game.turn.addGameBelow()
                 })
             }
         }

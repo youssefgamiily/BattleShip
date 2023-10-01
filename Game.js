@@ -115,12 +115,17 @@ class Game {
     <div class="disp-bel">Enemy Gameboard</div>
     </div>`;
     this.insertHTMLafterElem(document.querySelector(".NumShipsDiv"), html);
+    if (this.turn.boardDOM.classList.contains("hide")) this.turn.boardDOM.classList.remove("hide")
+    if (this.otherPlayer.boardDOM.classList.contains("hide")) this.otherPlayer.boardDOM.classList.remove("hide")
     tables.insertAdjacentElement("beforeend", this.otherPlayer.boardDOM);
     tables.insertAdjacentElement("beforeend", this.turn.boardDOM);
 
     return this.boardDOM;
   }
 
+  removeOtherListener () {
+    this.otherPlayer.boardDOM.replaceWith(this.otherPlayer.boardDOM.cloneNode(true));
+  }
   removeGameRender() {}
 }
 

@@ -45,7 +45,8 @@ const formShipPositionsDiv = (game) => {
 };
 
 const dispTop = (message, additionalElements = []) => {
-  if (topDiv.parentNode.parentNode.classList.contains("hide")) {
+  console.log(topDiv)
+  if (topDiv.parentNode.classList.contains("hide")) {
     console.log("in if condition---- L49  -----");
     topDiv.parentNode.parentNode.classList.remove("hide");
   }
@@ -121,12 +122,10 @@ const attachListener = (clearFormInputs) => {
       );
     } else if (turn2) {
       if (existingShipPlacementWrapper) existingShipPlacementWrapper.remove();
-      // dispTopRemove()
       dispTop("");
       game.switchTurns();
       switchTurns();
       addTableEventListeners(game);
-      // startGameLoop(game);
     }
   });
 };
