@@ -8,7 +8,6 @@ class Player {
     this.numberOfMissed = 0;
     this.gameBoard = new gameBoard();
     this.boardDOM = this.formDOMTable(this.gameBoard);
-    console.log(this.boardDOM);
     this.score = 0;
   }
   formDOMTable(gameboard) {
@@ -41,10 +40,7 @@ class Player {
     // square is "00"
     const x = parseInt(square[0]);
     const y = parseInt(square[1]);
-    console.log("parseInt(square) is : ");
-    console.log(parseInt(square));
     if (-1 < parseInt(square) < 100) {
-      console.log("going to receiveAttack()");
       enemy.gameBoard.receiveAttack(x, y);
     } else throw "attacking out of bounds cell";
     if (enemy.gameBoard.ifCellHit() === true) return true;
@@ -53,7 +49,6 @@ class Player {
     const tables = Array.from(document.querySelectorAll("table"));
 
     for (let table of tables) {
-      console.log(table);
       if (!table.classList.contains("hide")) {
         table.classList.add("hide");
       }

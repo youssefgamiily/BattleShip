@@ -1,8 +1,6 @@
 class gameBoard {
   constructor() {
     this.gameBoard = this.initGameBoard();
-    console.log("gameBoard is");
-    console.log(this.gameBoard);
     this.ships = 0;
   }
   initGameBoard() {
@@ -86,10 +84,8 @@ class gameBoard {
     } else throw "this Cell is out of Bounds";
   }
   receiveAttack(x, y) {
-    console.log(x, y);
     x = parseInt(x);
     y = parseInt(y);
-    console.log(x, y);
     if (this.isOutOfBounds[`${x}${y}`]) throw "attacking place out of bounds";
     if (this.gameBoard[x][y].hit == true)
       throw "this square has been hit before";

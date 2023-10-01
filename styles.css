@@ -127,11 +127,13 @@ td {
 
 .tables {
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #tables-label {
   display: flex;
-  justify-content:flex-start;
+  justify-content:center;
   align-items: center;
   gap: 25vw;
 }

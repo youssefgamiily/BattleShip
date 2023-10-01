@@ -62,7 +62,6 @@ class Game {
   logMove(move) {
     let [affectedPlayer, hitCell] = move;
     affectedPlayer = this.getPlayer(affectedPlayer);
-    console.log(affectedPlayer);
     if (
       !affectedPlayer.gameBoard.gameBoard[parseInt(hitCell.id[0])][
         parseInt(hitCell.id[1])
@@ -75,8 +74,6 @@ class Game {
   markmove(move) {
     let [affectedPlayer, hitCell] = move;
     affectedPlayer = this.getPlayer(affectedPlayer);
-    console.log(affectedPlayer);
-    console.log(move);
     let outcome = affectedPlayer.gameBoard.receiveAttack(
       hitCell.id[0],
       hitCell.id[1]
@@ -117,14 +114,38 @@ class Game {
     this.insertHTMLafterElem(document.querySelector(".NumShipsDiv"), html);
     if (this.turn.boardDOM.classList.contains("hide")) this.turn.boardDOM.classList.remove("hide")
     if (this.otherPlayer.boardDOM.classList.contains("hide")) this.otherPlayer.boardDOM.classList.remove("hide")
-    tables.insertAdjacentElement("beforeend", this.otherPlayer.boardDOM);
     tables.insertAdjacentElement("beforeend", this.turn.boardDOM);
+    tables.insertAdjacentElement("beforeend", this.otherPlayer.boardDOM);
 
     return this.boardDOM;
   }
 
   removeOtherListener () {
-    this.otherPlayer.boardDOM.replaceWith(this.otherPlayer.boardDOM.cloneNode(true));
+    console.log(`before removing the event listeners from:`, this.turn.boardDOM)
+    // this.turn.boardDOM.replaceWith(this.turn.boardDOM.cloneNode(true));
+    this.turn.boardDOM.removeEventListener("click", (e) =>{
+      console.log("adding listener to", table)
+      e.preventDefault()
+      console.log(e)
+      if (e.target.nodeName == "TD") {
+          if ( -1 < parseInt(e.target.id) < 100) {
+              console.log("in L104")
+              const affectedPlayer = e.target.closest("table").classList.item(0)[1]
+              const move= [affectedPlayer, e.target]
+              console.log(move)
+              game.registerMove(move)
+              
+          }
+      }
+      console.log("in L112")
+      game.turn.hideAllTables()
+      
+      game.switchTurns()
+      dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
+      game.renderGame()
+      dispBelow(`Player-${game.turn.num}'s own Board`)
+  })
+    console.log(`removing event listener from`, this.turn.boardDOM)
   }
   removeGameRender() {}
 }

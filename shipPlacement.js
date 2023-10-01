@@ -45,24 +45,19 @@ const formShipPositionsDiv = (game) => {
 };
 
 const dispTop = (message, additionalElements = []) => {
-  console.log(topDiv)
   if (topDiv.parentNode.classList.contains("hide")) {
-    console.log("in if condition---- L49  -----");
     topDiv.parentNode.parentNode.classList.remove("hide");
   }
   if (topDiv.parentNode.querySelector(".disp-bel"))
     topDiv.parentNode.querySelector(".disp-bel").remove();
-  console.log(`in dispTop with message = ${message}`, topDiv);
   const heading = document.createElement("h3");
   heading.id = "temp-header";
   heading.insertAdjacentHTML("beforeend", message);
   topDiv.innerHTML = "";
-  console.log(`element to be added is: `, heading);
   topDiv.insertAdjacentElement("afterbegin", heading);
   for (const element of additionalElements) {
     topDiv.insertAdjacentElement("beforeend", element);
   }
-  console.log(`topDiv is now: `, topDiv);
 };
 
 const dispTopRemove = () => {

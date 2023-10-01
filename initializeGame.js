@@ -97,15 +97,13 @@ const addTableEventListeners = (game) => {
     return new Promise((resolve) => {
         game.renderGame()
         let gameBoards = body.querySelectorAll("table")
-        console.log(gameBoards)
+        let flag = false
         for (let table of Array.from(gameBoards)) {
-            console.log("in for loop")
-            console.log(table, game.turn.boardDOM)
-            if (table === game.turn.boardDOM){
+            if (table === game.otherPlayer.boardDOM){
                 const otherTable = Array.from(gameBoards).filter((table)=> table!==game.turn.boardDOM)
                 game.removeOtherListener()// remove the evenlisteners from the other table
-                console.log("in L98")
                 table.addEventListener("click", (e) =>{
+                    console.log("adding listener to", table)
                     e.preventDefault()
                     console.log(e)
                     if (e.target.nodeName == "TD") {
@@ -121,11 +119,15 @@ const addTableEventListeners = (game) => {
                     console.log("in L112")
                     game.turn.hideAllTables()
                     
-                    game.switchTurns()
-                    dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
-                    game.renderGame()
-                    dispBelow(`Player-${game.turn.num}'s own Board`)
                 })
+                if (!flag) { // just want to make sure i only switchTurns once as i loop over the tables
+                    console.log("in flag condition")
+                    game.switchTurns();
+                    flag=true
+                }
+                dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
+                game.renderGame()
+                dispBelow(`Player-${game.turn.num}'s own Board`)
             }
         }
         startGameLoop(game) 
