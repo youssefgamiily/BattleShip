@@ -45,15 +45,7 @@ class Player {
     } else throw "attacking out of bounds cell";
     if (enemy.gameBoard.ifCellHit() === true) return true;
   }
-  hideAllTables() {
-    const tables = Array.from(document.querySelectorAll("table"));
 
-    for (let table of tables) {
-      if (!table.classList.contains("hide")) {
-        table.classList.add("hide");
-      }
-    }
-  }
 
 
   addGameBelow() {

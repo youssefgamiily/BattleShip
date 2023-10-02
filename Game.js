@@ -33,6 +33,7 @@ class Game {
   }
 
   switchTurns() {
+    console.log("game.turn was player-", this.turn.num)
     if (this.turn == this.player1) {
       this.turn = this.player2;
       this.otherPlayer = this.player1;
@@ -40,6 +41,7 @@ class Game {
       this.turn = this.player1;
       this.otherPlayer = this.player2;
     }
+    console.log("game.turn now is player-", this.turn.num)
   }
   receiveAttackedUser(cell) {
     this.otherPlayer.renderGame();
@@ -138,7 +140,7 @@ class Game {
           }
       }
       console.log("in L112")
-      game.turn.hideAllTables()
+      this.hideAllTables()
       
       game.switchTurns()
       dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
@@ -148,6 +150,16 @@ class Game {
     console.log(`removing event listener from`, this.turn.boardDOM)
   }
   removeGameRender() {}
+
+  hideAllTables() {
+    const tables = Array.from(document.querySelectorAll("table"));
+
+    for (let table of tables) {
+      if (!table.classList.contains("hide")) {
+        table.classList.add("hide");
+      }
+    }
+  }
 }
 
 export { Game };

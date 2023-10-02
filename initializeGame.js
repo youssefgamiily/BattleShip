@@ -93,47 +93,83 @@ async function initializeGame (game) {
 
 }
 
+/* add listener to game.other such that:
+    1. if it is a valid click, process the move and then add this same listener to the other table and remove it from this table. */
+
+
+
+function processMove(e, game) {
+    if (e.target.nodeName == "TD") {
+        if ( -1 < parseInt(e.target.id) < 100) {
+            console.log("in L104")
+            const affectedPlayer = game.otherPlayer.num
+            const move= [affectedPlayer, e.target]
+            console.log(move)
+            game.registerMove(move)
+            return true
+        }
+        else return false
+    }
+}
+  
+  
+const handleTableClick = (e, game) => {
+    e.preventDefault()
+    let moveProcessed = processMove(e, game)
+    game.otherPlayer.boardDOM.removeEventListener("click", handleTableClick)
+    game.turn.boardDOM.addEventListener("click", (e) => {handleTableClick(e, game)},{ once: true })
+    game.switchTurns()
+    game.renderGame()
+    dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
+    dispBelow(`Player-${game.turn.num}'s own Board`)
+}
+
 const addTableEventListeners = (game) => {
     return new Promise((resolve) => {
-        game.renderGame()
-        let gameBoards = body.querySelectorAll("table")
-        let flag = false
-        for (let table of Array.from(gameBoards)) {
-            if (table === game.otherPlayer.boardDOM){
-                const otherTable = Array.from(gameBoards).filter((table)=> table!==game.turn.boardDOM)
-                game.removeOtherListener()// remove the evenlisteners from the other table
-                table.addEventListener("click", (e) =>{
-                    console.log("adding listener to", table)
-                    e.preventDefault()
-                    console.log(e)
-                    if (e.target.nodeName == "TD") {
-                        if ( -1 < parseInt(e.target.id) < 100) {
-                            console.log("in L104")
-                            const affectedPlayer = e.target.closest("table").classList.item(0)[1]
-                            const move= [affectedPlayer, e.target]
-                            console.log(move)
-                            game.registerMove(move)
-                            
-                        }
-                    }
-                    console.log("in L112")
-                    game.turn.hideAllTables()
-                    
-                })
-                if (!flag) { // just want to make sure i only switchTurns once as i loop over the tables
-                    console.log("in flag condition")
-                    game.switchTurns();
-                    flag=true
-                }
-                dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
-                game.renderGame()
-                dispBelow(`Player-${game.turn.num}'s own Board`)
-            }
-        }
+        game.otherPlayer.boardDOM.addEventListener("click", (e) => handleTableClick(e, game), { once: true })
         startGameLoop(game) 
         resolve()
-    
     })
 }
+
+// const addTableEventListeners = (game) => {
+//     return new Promise((resolve) => {
+//         let gameBoards = body.querySelectorAll("table")
+//         console.log("in flag condition and turn is now for player-", game.turn.num)
+//         game.switchTurns();
+//         game.renderGame()
+//         for (let table of Array.from(gameBoards)) {
+//             if (table === game.otherPlayer.boardDOM){
+//                 const otherTable = Array.from(gameBoards).filter((table)=> table!==game.turn.boardDOM)
+//                 table.addEventListener("click", (e) =>{
+//                     game.removeOtherListener()// remove the evenlisteners from the other table
+//                     console.log("adding listener to", table)
+//                     e.preventDefault()
+//                     console.log(e)
+//                     if (e.target.nodeName == "TD") {
+//                         if ( -1 < parseInt(e.target.id) < 100) {
+//                             console.log("in L104")
+//                             const affectedPlayer = e.target.closest("table").classList.item(0)[1]
+//                             const move= [affectedPlayer, e.target]
+//                             console.log(move)
+//                             game.registerMove(move)
+                            
+//                         }
+//                     }
+//                     console.log("in L112")
+//                     // game.hideAllTables()
+                    
+
+//                 })
+//                 dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
+//                 game.renderGame()
+//                 dispBelow(`Player-${game.turn.num}'s own Board`)
+//             }
+//         }
+//         startGameLoop(game) 
+//         resolve()
+    
+//     })
+// }
 
 export {initializeGame, addTableEventListeners}
