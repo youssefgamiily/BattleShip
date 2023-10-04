@@ -1,7 +1,7 @@
 class gameBoard {
   constructor() {
     this.gameBoard = this.initGameBoard();
-    this.ships = 0;
+    this.ships = [];
   }
   initGameBoard() {
     const board = [];
@@ -45,6 +45,7 @@ class gameBoard {
   }
   isOutOfBounds(arr) {
     for (let elem of arr) {
+      console.log(`in gameBoard.isOutOfBounds, elem:`, elem);
       if (elem.length !== 2) return true;
       let int = parseInt(elem);
       if (int < 0 || int > 99) return true;
@@ -69,7 +70,7 @@ class gameBoard {
       let row = parseInt(cell[0]);
       let col = parseInt(cell[1]);
       this.gameBoard[row][col].ship = shipToBePlaced;
-      this.ships++;
+      this.ships.push(shipToBePlaced);
     }
     return "1";
   }
@@ -83,17 +84,24 @@ class gameBoard {
       return this.gameBoard[x][y].hit;
     } else throw "this Cell is out of Bounds";
   }
+
+  removeElementFromArray(arr, element) {
+    // Use the filter method to create a new array with elements not equal to the specified element
+    return arr.filter((item) => item !== element);
+  }
+
   receiveAttack(x, y) {
     x = parseInt(x);
     y = parseInt(y);
-    if (this.isOutOfBounds[`${x}${y}`]) throw "attacking place out of bounds";
+    if (this.isOutOfBounds[`${x}${y}`])
+      throw new Error("attacking place out of bounds");
     if (this.gameBoard[x][y].hit == true)
-      throw "this square has been hit before";
+      throw new Error("this square has been hit before");
     this.gameBoard[x][y].hit = true;
     if (this.gameBoard[x][y].ship !== null) {
       this.gameBoard[x][y].ship.hit();
       if (this.gameBoard[x][y].ship.isSunk()) {
-        this.ships--;
+        this.ships = this.removeElementFromArray(ships, this.gameBoard[x][y].ship);
         return 1;
       } else if (
         this.gameBoard[x][y].ship.hitsTaken <

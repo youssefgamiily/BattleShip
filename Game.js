@@ -14,10 +14,10 @@ class Game {
 
   isWin() {
     if (this.player1.gameBoard.ships.length === 0) {
-      this.winner = "player2";
+      this.winner = this.player2;
       return true;
     } else if (this.player2.gameBoard.ships.length === 0) {
-      this.winner = "player1";
+      this.winner = this.player1;
       return true;
     }
     return false;
@@ -33,7 +33,7 @@ class Game {
   }
 
   switchTurns() {
-    console.log("game.turn was player-", this.turn.num)
+    console.log("game.turn was player-", this.turn.num);
     if (this.turn == this.player1) {
       this.turn = this.player2;
       this.otherPlayer = this.player1;
@@ -41,7 +41,7 @@ class Game {
       this.turn = this.player1;
       this.otherPlayer = this.player2;
     }
-    console.log("game.turn now is player-", this.turn.num)
+    console.log("game.turn now is player-", this.turn.num);
   }
   receiveAttackedUser(cell) {
     this.otherPlayer.renderGame();
@@ -92,11 +92,25 @@ class Game {
       hitCell.insertAdjacentHTML("afterbegin", this.markers.targetMissed);
     } else throw new Error("unexpected Outcome from gameBoard.receiveAttack()");
   }
+  markSurroundings(move) {
+    let [affectedPlayer, hitCell] = move;
+    affectedPlayer = this.getPlayer(affectedPlayer);
+    if (
+      !affectedPlayer.gameBoard.ifCellHit(
+        parseInt(hitCell.id[0]),
+        parseInt(hitCell.id[1])
+      )
+    ) {
+      // if cell is not hit (done)--> find neighbors --> for neighbor of neighbors --> if inBounds --> if not marked & if no ship on it: mark as X
+    }
+  }
+
   registerMove(move) {
     //move = [1 (player1 is affected), hit cell element]
     let [affectedPlayer, hitCell] = move;
     this.logMove(move);
     this.markmove(move);
+    this.markSurroundings(move);
   }
 
   insertHTMLafterElem(elem1, elem2) {
@@ -114,40 +128,44 @@ class Game {
     <div class="disp-bel">Enemy Gameboard</div>
     </div>`;
     this.insertHTMLafterElem(document.querySelector(".NumShipsDiv"), html);
-    if (this.turn.boardDOM.classList.contains("hide")) this.turn.boardDOM.classList.remove("hide")
-    if (this.otherPlayer.boardDOM.classList.contains("hide")) this.otherPlayer.boardDOM.classList.remove("hide")
+    if (this.turn.boardDOM.classList.contains("hide"))
+      this.turn.boardDOM.classList.remove("hide");
+    if (this.otherPlayer.boardDOM.classList.contains("hide"))
+      this.otherPlayer.boardDOM.classList.remove("hide");
     tables.insertAdjacentElement("beforeend", this.turn.boardDOM);
     tables.insertAdjacentElement("beforeend", this.otherPlayer.boardDOM);
 
     return this.boardDOM;
   }
 
-  removeOtherListener () {
-    console.log(`before removing the event listeners from:`, this.turn.boardDOM)
+  removeOtherListener() {
+    console.log(
+      `before removing the event listeners from:`,
+      this.turn.boardDOM
+    );
     // this.turn.boardDOM.replaceWith(this.turn.boardDOM.cloneNode(true));
-    this.turn.boardDOM.removeEventListener("click", (e) =>{
-      console.log("adding listener to", table)
-      e.preventDefault()
-      console.log(e)
+    this.turn.boardDOM.removeEventListener("click", (e) => {
+      console.log("adding listener to", table);
+      e.preventDefault();
+      console.log(e);
       if (e.target.nodeName == "TD") {
-          if ( -1 < parseInt(e.target.id) < 100) {
-              console.log("in L104")
-              const affectedPlayer = e.target.closest("table").classList.item(0)[1]
-              const move= [affectedPlayer, e.target]
-              console.log(move)
-              game.registerMove(move)
-              
-          }
+        if (-1 < parseInt(e.target.id) < 100) {
+          console.log("in L104");
+          const affectedPlayer = e.target.closest("table").classList.item(0)[1];
+          const move = [affectedPlayer, e.target];
+          console.log(move);
+          game.registerMove(move);
+        }
       }
-      console.log("in L112")
-      this.hideAllTables()
-      
-      game.switchTurns()
-      dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`)
-      game.renderGame()
-      dispBelow(`Player-${game.turn.num}'s own Board`)
-  })
-    console.log(`removing event listener from`, this.turn.boardDOM)
+      console.log("in L112");
+      this.hideAllTables();
+
+      game.switchTurns();
+      dispTop(`Player-${game.turn.num}'s Turn - Enemy Board:`);
+      game.renderGame();
+      dispBelow(`Player-${game.turn.num}'s own Board`);
+    });
+    console.log(`removing event listener from`, this.turn.boardDOM);
   }
   removeGameRender() {}
 
