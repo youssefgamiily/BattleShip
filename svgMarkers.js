@@ -1,47 +1,43 @@
 const markers = {
-    targetDamaged: `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+    targetDamaged: `<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
     <!-- Water Animation -->
-    <rect x="0" y="100" width="200" height="100" fill="#0099cc">
-      <animate attributeName="y" from="100" to="105" dur="1s" repeatCount="indefinite" />
+    <rect x="0" y="20" width="40" height="20" fill="#0099cc">
+      <animate attributeName="y" from="20" to="22" dur="1s" repeatCount="indefinite" />
     </rect>
   
     <!-- Sailboat Body -->
-    <g transform="rotate(-15, 100, 100)">
-      <path d="M40 100 L100 50 L160 100 Z" fill="#8B4513" stroke="#000" stroke-width="2" />
-      <path d="M80 50 L80 90 Q80 100, 90 100 T100 90 L100 50 Z" fill="#8B4513" stroke="#000" stroke-width="2" />
+    <g transform="rotate(-15, 20, 20)">
+      <path d="M8 20 L20 10 L32 20 Z" fill="#8B4513" stroke="#000" stroke-width="1" />
+      <path d="M16 10 L16 18 Q16 20, 18 20 T20 18 L20 10 Z" fill="#8B4513" stroke="#000" stroke-width="1" />
   
       <!-- Sail -->
-      <path d="M90 50 Q90 20, 100 50 T110 50" fill="#fff" stroke="#000" stroke-width="2" />
+      <path d="M18 10 Q18 5, 20 10 T22 10" fill="#fff" stroke="#000" stroke-width="1" />
     </g>
   
     <!-- Waves Animation -->
-    <path d="M0 120 Q20 125, 40 120 T80 125 T120 120 T160 125 T200 120" fill="#0099cc">
-      <animate attributeName="d" from="M0 120 Q20 125, 40 120 T80 125 T120 120 T160 125 T200 120"
-        to="M0 120 Q20 130, 40 120 T80 130 T120 120 T160 130 T200 120"
+    <path d="M0 24 Q5 25, 10 24 T20 25 T30 24 T40 25" fill="#0099cc">
+      <animate attributeName="d" from="M0 24 Q5 25, 10 24 T20 25 T30 24 T40 25"
+        to="M0 24 Q5 26, 10 24 T20 26 T30 24 T40 26"
         dur="2s" repeatCount="indefinite" />
     </path>
   </svg>
+  
   `,
-    tagetSunk: `<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+    tagetSunk: `<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
     <!-- Bomb Body -->
-    <circle cx="50" cy="50" r="30" fill="#333" stroke="#000" stroke-width="2" />
+    <circle cx="20" cy="20" r="12" fill="#333" stroke="#000" stroke-width="1" />
     <!-- Fuse -->
-    <line x1="50" y1="20" x2="50" y2="35" stroke="#000" stroke-width="2" />
+    <line x1="20" y1="8" x2="20" y2="14" stroke="#000" stroke-width="1" />
     <!-- Smoke -->
-    <circle cx="45" cy="20" r="8" fill="#ccc">
-      <animate attributeName="r" from="8" to="20" dur="1s" begin="0s" repeatCount="indefinite" />
+    <circle cx="18" cy="8" r="4" fill="#ccc">
+      <animate attributeName="r" from="4" to="10" dur="1s" begin="0s" repeatCount="indefinite" />
       <animate attributeName="opacity" from="1" to="0" dur="1s" begin="0s" repeatCount="indefinite" />
     </circle>
-    <circle cx="55" cy="22" r="10" fill="#ccc">
-      <animate attributeName="r" from="10" to="30" dur="1s" begin="0s" repeatCount="indefinite" />
+    <circle cx="22" cy="9" r="5" fill="#ccc">
+      <animate attributeName="r" from="5" to="15" dur="1s" begin="0s" repeatCount="indefinite" />
       <animate attributeName="opacity" from="1" to="0" dur="1s" begin="0s" repeatCount="indefinite" />
     </circle>
-  </svg>
-  `,
-  targetMissed: `<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-  <line x1="10" y1="10" x2="30" y2="30" stroke="#FF0000" stroke-width="3" />
-  <line x1="10" y1="30" x2="30" y2="10" stroke="#FF0000" stroke-width="3" />
-</svg>
+  </svg>  
 `
 }
 
