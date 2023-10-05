@@ -65,17 +65,20 @@ const dispTopRemove = () => {
 };
 
 function getShipPositions(game, guide) {
-  // by me
-  return new Promise(() => {
+  return new Promise((resolve, reject) => {
     const shipPositions = Array.from(placeShipDiv.querySelectorAll("input"));
-    for (let input of shipPositions) {
-      let id = parseInt(input.id[0]);
-      const Value = parseStringToArrays(input.value);
-      for (let element of Value) {
-        // element should be ['']
-        game.turn.gameBoard.placeShip(new Ship(id, id), element);
+    if (shipPositions.every(pos => pos.value!="")) { 
+      // if inputs are not empty --TODO: && if ship positions entered are 1: unique, 2: inline with the number of ships entered to the game
+      for (let input of shipPositions) {
+        let id = parseInt(input.id[0]);
+        const Value = parseStringToArrays(input.value);
+        for (let element of Value) {
+          game.turn.gameBoard.placeShip(new Ship(id, id), element);
+        }
       }
-    }
+      // make the promise resolve to 1
+      resolve(1)
+    } else reject(-7)// make the promise resolve to -7
   });
 }
 
@@ -103,28 +106,36 @@ const attachListener = (clearFormInputs) => {
   submitShipPositionsBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     buttonClicked = true;
-    getShipPositions(game, game.turn);
-    let existingShipPlacementWrapper = document.querySelector(
-      ".ShipPlacementWrapper"
-    );
-
-    if (turn1) {
-      clearFormInputs(existingShipPlacementWrapper);
-      game.switchTurns();
-      switchTurns();
-      dispTop(
-        `Player-${game.turn.num}, please enter your ship positions below`
+    let promiseResolved
+    let res = getShipPositions(game, game.turn); // takes the ship positions from dom and adds the ships to the game object.
+    console.log(res)
+    res.then(result => {console.log(result)
+    console.log(promiseResolved)
+    // if (promiseResolved){
+      console.log("promise RESOLVED -- Valid Placements!!")
+      let existingShipPlacementWrapper = document.querySelector(
+        ".ShipPlacementWrapper"
       );
-    } else if (turn2) {
-      if (existingShipPlacementWrapper) existingShipPlacementWrapper.remove();
-      dispTop("");
-      game.switchTurns();
-      switchTurns();
-      addTableEventListeners(game);
-    }
-  });
-};
 
+      if (turn1) {
+        clearFormInputs(existingShipPlacementWrapper);
+        game.switchTurns();
+        switchTurns();
+        dispTop(
+          `Player-${game.turn.num}, please enter your ship positions below`
+        );
+      } else if (turn2) {
+        if (existingShipPlacementWrapper) existingShipPlacementWrapper.remove();
+        dispTop("");
+        game.switchTurns();
+        switchTurns();
+        addTableEventListeners(game);
+      } else throw new Error ("invalid Ship Placement Entry/ies")
+      ;promiseResolved = true
+    }).catch((error) => {throw new Error ("invalid ship Placement. Try again")})
+  // }
+})
+}
 const clearFormInputs = (form) => {
   console.log("in clearFormInputs");
   const inputsArr = Array.from(form.querySelectorAll("input"));
@@ -134,7 +145,7 @@ const clearFormInputs = (form) => {
 
 async function initShipPlacement(game) {
   handlePlayer(game.turn.num, game);
-  attachListener(clearFormInputs);
+  attachListener(clearFormInputs)
   // At this point, both players have entered ship positions, and you can start the game.
 }
 

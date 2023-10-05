@@ -77,8 +77,6 @@ async function initializeGame(game) {
   });
 }
 
-/* add listener to game.other such that:
-    1. if it is a valid click, process the move and then add this same listener to the other table and remove it from this table. */
 
 function processMove(e, game) {
   const fDig = parseInt(e.target.id[0]); // first digit

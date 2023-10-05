@@ -82,7 +82,7 @@ class gameBoard {
   ifCellHit(x, y) {
     if (!this.isOutOfBounds([`${x}${y}`])) {
       return this.gameBoard[x][y].hit;
-    } else throw "this Cell is out of Bounds";
+    } else throw new Error("this Cell is out of Bounds");
   }
 
   removeElementFromArray(arr, element) {
