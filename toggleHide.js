@@ -12,11 +12,11 @@ const parseStringToArrays = (inputString)=> {
   
     const arrayOfArrays = arrayStrings.map((str) => {
       const cleanedStr = str.replace(/\[|\]/g, ''); // Remove square brackets
-      const arrayValues = cleanedStr.split(',').map((item) => item.trim());
+      const arrayValues = cleanedStr.split(',').map((item) => item.trim()); //.trim() removes white spaces from the string beginning and string end
       return arrayValues;
     });
   
     return arrayOfArrays;
-  }
+}
 
 export {toggleHide, parseStringToArrays}

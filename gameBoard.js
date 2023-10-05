@@ -87,6 +87,7 @@ class gameBoard {
 
   removeElementFromArray(arr, element) {
     // Use the filter method to create a new array with elements not equal to the specified element
+    console.log('this.ships:', this.ships)
     return arr.filter((item) => item !== element);
   }
 

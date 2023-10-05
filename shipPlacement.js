@@ -67,15 +67,37 @@ const dispTopRemove = () => {
 function getShipPositions(game, guide) {
   return new Promise((resolve, reject) => {
     const shipPositions = Array.from(placeShipDiv.querySelectorAll("input"));
-    if (shipPositions.every(pos => pos.value!="")) { 
-      // if inputs are not empty --TODO: && if ship positions entered are 1: unique, 2: inline with the number of ships entered to the game
+    if (shipPositions.every(pos => pos.value!="")) {
       for (let input of shipPositions) {
         let id = parseInt(input.id[0]);
         const Value = parseStringToArrays(input.value);
-        for (let element of Value) {
-          game.turn.gameBoard.placeShip(new Ship(id, id), element);
+        input.id[0] // tells you which form this is ex: input.id[0] = 4 --> this is the form for the 4sq ships
+        let numOfShipsSubmitted = Value.length // number of ship positions placed in the form (must equal number of ship positions in the game object)
+        let numberOfShipsinGame
+        switch(parseInt(input.id[0])){
+          case 4:
+            numberOfShipsinGame = game.numberOfShips.NumSqIs4
+            break;
+          case 3:
+            numberOfShipsinGame = game.numberOfShips.NumSqIs3
+            break;
+          case 2:
+            numberOfShipsinGame = game.numberOfShips.NumSqIs2
+            break;
+          case 1:
+            numberOfShipsinGame = game.numberOfShips.NumSqIs1
+            break;
         }
+        console.log(numOfShipsSubmitted, numberOfShipsinGame)
+        if (numberOfShipsinGame == numOfShipsSubmitted){
+          console.log("here")
+          for (let element of Value) {
+            console.log("here")
+            game.turn.gameBoard.placeShip(new Ship(id, id), element);
+          }
+        } else throw new Error ("number of Ships submitted is not equal number of Ships in Game")
       }
+      console.log("here")
       // make the promise resolve to 1
       resolve(1)
     } else reject(-7)// make the promise resolve to -7
@@ -107,35 +129,38 @@ const attachListener = (clearFormInputs) => {
     e.preventDefault();
     buttonClicked = true;
     let promiseResolved
+    console.log("going into getting ship positinos()")
     let res = getShipPositions(game, game.turn); // takes the ship positions from dom and adds the ships to the game object.
-    console.log(res)
-    res.then(result => {console.log(result)
-    console.log(promiseResolved)
+    console.log("coming out of getting ship positions()")
+    res.then(result => {promiseResolved = true;console.log("resolved", promiseResolved)
     // if (promiseResolved){
-      console.log("promise RESOLVED -- Valid Placements!!")
       let existingShipPlacementWrapper = document.querySelector(
         ".ShipPlacementWrapper"
       );
 
-      if (turn1) {
+      console.log(turn1, turn2)
+      if (turn1==true && turn2==false) {
+        console.log("turn 1")
         clearFormInputs(existingShipPlacementWrapper);
         game.switchTurns();
         switchTurns();
         dispTop(
           `Player-${game.turn.num}, please enter your ship positions below`
         );
-      } else if (turn2) {
+      } else if (turn2==true && turn1==false) {
+        console.log("turn2")
         if (existingShipPlacementWrapper) existingShipPlacementWrapper.remove();
         dispTop("");
         game.switchTurns();
         switchTurns();
         addTableEventListeners(game);
-      } else throw new Error ("invalid Ship Placement Entry/ies")
-      ;promiseResolved = true
-    }).catch((error) => {throw new Error ("invalid ship Placement. Try again")})
-  // }
-})
-}
+      }
+    // } 
+    }).catch((error) => {promiseResolved=false; console.log("rejected", error, promiseResolved)
+    console.log("returning -1", "turn1, turn2: ", turn1, turn2);return -1})
+    });
+  }
+
 const clearFormInputs = (form) => {
   console.log("in clearFormInputs");
   const inputsArr = Array.from(form.querySelectorAll("input"));
@@ -146,6 +171,7 @@ const clearFormInputs = (form) => {
 async function initShipPlacement(game) {
   handlePlayer(game.turn.num, game);
   attachListener(clearFormInputs)
+
   // At this point, both players have entered ship positions, and you can start the game.
 }
 
