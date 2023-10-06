@@ -78,6 +78,7 @@ async function initializeGame(game) {
 }
 
 
+
 function processMove(e, game) {
   const fDig = parseInt(e.target.id[0]); // first digit
   const sDig = parseInt(e.target.id[1]); // second digit
@@ -97,7 +98,9 @@ function processMove(e, game) {
 
       if (game.isWin()) {
         console.log(game)
-        console.log(`----- player-${game.winner.num} wins!!! -----`);
+        game.showWinner()
+        game.otherPlayer.boardDOM.removeEventListener("click", handleTableClick);
+        game.turn.boardDOM.removeEventListener("click", handleTableClick);
       }
       return true;
     } else return false;

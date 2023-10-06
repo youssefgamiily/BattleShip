@@ -43,6 +43,24 @@ class gameBoard {
     }
     return true;
   }
+  getAdjacentInBound(NumStr) {
+    declaredArr = [0,1,2,3,4,5,6,7,8,9]
+    let combinations = []
+    let possibleCombination
+    for (let index = 0; index<NumStr.length; index++) {
+      fixed = NumStr[index]
+      for (num of declaredArr) {
+        if (index == 0) {
+          possibleCombination = `${fixed}${num}`
+        }
+        else {
+          possibleCombination = `${num}${fixed}`
+        }
+        combinations.push(possibleCombination)
+      }
+    }
+    return combinations
+  }
   isOutOfBounds(arr) {
     for (let elem of arr) {
       console.log(`in gameBoard.isOutOfBounds, elem:`, elem);
@@ -102,7 +120,9 @@ class gameBoard {
     if (this.gameBoard[x][y].ship !== null) {
       this.gameBoard[x][y].ship.hit();
       if (this.gameBoard[x][y].ship.isSunk()) {
-        this.ships = this.removeElementFromArray(ships, this.gameBoard[x][y].ship);
+        console.log(this.ships)
+        this.ships = this.removeElementFromArray(this.ships, this.gameBoard[x][y].ship);
+        console.log(this.ships)
         return 1;
       } else if (
         this.gameBoard[x][y].ship.hitsTaken <

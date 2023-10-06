@@ -50,11 +50,11 @@ class Game {
     const sideBar = document.querySelector(".sideBar");
     let attacker;
     if (parseInt(move[0]) == 1) {
-      attacker = 2;
-    } else attacker = 1;
+      attacker = this.player2.name;
+    } else attacker = this.player1.name;
     sideBar.insertAdjacentHTML(
       "afterbegin",
-      `<div class="move"><h1>attacker:"player: ${attacker}"</h1>  <h1>"hits: #${move[1].id}"</h1></div>`
+      `<div class="move"><h1>attacker:"${attacker}"</h1>  <h1>"hits: #${move[1].id}"</h1></div>`
     );
   }
   getPlayer(playerNum) {
@@ -73,6 +73,25 @@ class Game {
       this.renderInSideBar(move);
     }
   }
+  getAdjacentInBound(NumStr) {
+    let declaredArr = [0,1,2,3,4,5,6,7,8,9]
+    let combinations = []
+    let possibleCombination
+    for (let index = 0; index<NumStr.length; index++) {
+      let fixed = NumStr[index]
+      for (let num of declaredArr) {
+        if (index == 0) {
+          possibleCombination = `${fixed}${num}`
+        }
+        else {
+          possibleCombination = `${num}${fixed}`
+        }
+        combinations.push(possibleCombination)
+      }
+    }
+    return combinations
+  }
+  
   markmove(move) {
     let [affectedPlayer, hitCell] = move;
     affectedPlayer = this.getPlayer(affectedPlayer);
@@ -84,6 +103,18 @@ class Game {
     if (outcome == 1) {
       // if ship sunk
       hitCell.insertAdjacentHTML("afterbegin", this.markers.tagetSunk);
+      let adjacentCells = this.getAdjacentInBound(`${hitCell.id[0]}${hitCell.id[1]}`) // for 03 returns ['01', "02",... ,  "09", "03", "13", "23", .. , "93"]
+      for (let elem of adjacentCells.filter(elem => elem !== hitCell.id)) {
+        let fDig = parseInt(elem[0])
+        let sDig = parseInt(elem[1])
+        if (affectedPlayer.gameBoard.gameBoard[fDig][sDig].ship === affectedPlayer.gameBoard.gameBoard[parseInt(hitCell.id[0])][parseInt(hitCell.id[1])].ship ){
+         console.log("in the neighboring cell if condition")
+          //get the DOM of this cell
+          let neighboringCell = affectedPlayer.boardDOM.querySelector(`[id='${elem}']`)
+         // mark add this DOM svg as Sunk 
+         neighboringCell.innerHTML = `${this.markers.tagetSunk}`
+        }
+      }
     } else if (outcome == 2) {
       // if ship damaged returns 2
       hitCell.insertAdjacentHTML("afterbegin", this.markers.targetDamaged);
@@ -124,8 +155,8 @@ class Game {
 
     document.querySelector("#tables-label").remove();
     const html = `<div class="wrapper" id="tables-label">
-    <div class="top-disp">Your GameBoard</div>
-    <div class="disp-bel">Enemy Gameboard</div>
+    <div class="top-disp">${game.turn.name} GameBoard</div>
+    <div class="disp-bel">${game.otherPlayer.name} Gameboard</div>
     </div>`;
     this.insertHTMLafterElem(document.querySelector(".NumShipsDiv"), html);
     if (this.turn.boardDOM.classList.contains("hide"))
@@ -177,6 +208,22 @@ class Game {
         table.classList.add("hide");
       }
     }
+  }
+
+  showWinner() {
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message-container');
+    messageContainer.innerHTML = `Player: ${this.winner.name} Wins!! Congratulations`;
+    document.body.insertAdjacentElement("afterbegin",messageContainer);
+
+    // Apply CSS animation
+    messageContainer.style.display = 'block';
+
+    // Remove the message after a few seconds
+    setTimeout(() => {
+        messageContainer.style.display = 'none';
+        document.body.removeChild(messageContainer);
+    }, 5000); // Adjust the duration as needed
   }
 }
 
